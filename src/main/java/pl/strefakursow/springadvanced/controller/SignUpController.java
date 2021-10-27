@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import pl.strefakursow.springadvanced.entity.User;
 import pl.strefakursow.springadvanced.service.SignUpService;
 
@@ -26,9 +27,12 @@ public class SignUpController {
     }
 
     @PostMapping(value = "/sign_up")
-    public ModelAndView signUpPost(ModelAndView mav, @RequestParam("username") String username, @RequestParam("password") String password) {
+    public ModelAndView signUpPost(ModelAndView mav, @RequestParam("username") String username,
+                                   @RequestParam("password") String password, @RequestParam("email") String email) {
         mav.setViewName("redirect:/login");
-        signUpService.signUp(new User(username, password));
+        User user = User.of(username, password, email);
+        signUpService.signUpUser(user);
         return mav;
     }
+
 }

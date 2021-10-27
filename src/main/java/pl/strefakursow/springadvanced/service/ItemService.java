@@ -9,19 +9,19 @@ import java.util.List;
 
 public interface ItemService {
 
-    void saveItem(Item item);
+    public void saveItem(Item item);
 
-    List<Item> getItemsWithQuantityOverTwenty();
+    public List<Item> getItemsWithQuantityOverTwenty();
 
-    List<Item> getItemWithQuantityOver(int minQuantityThreshold);
+    public List<Item> getItemsWithQuantityOver(int minQuantityThreshold);
 
-    List<Item> getItemWithNameLike(String regex);
+    public List<Item> getItemsWithNameLike(String regex);
 
-    List<Item> findByQuantity(Integer quantity);
+    public List<Item> findByQuantity(Integer quantity);
 
-    List<Item> findAllByQuantityBetween(Integer minQ, Integer maxQ);
+    public List<Item> findByQuantityBetween(Integer minQuantity, Integer maxQuantity);
 
-    List<Item> findAllByQuantityGreaterThanEqualOrderByQuantityDesc(Integer minQ);
+    public List<Item> findByQuantityGreaterThanEqualOrderByQuantityDesc(Integer minQuantity);
 
-    Page<Item> findAll(Pageable pageable);
+    public Page<Item> findAll(Pageable pageable);
 }

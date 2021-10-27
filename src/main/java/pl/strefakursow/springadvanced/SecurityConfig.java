@@ -10,21 +10,25 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import pl.strefakursow.springadvanced.component.CustomDaoAuthenticationProvider;
 import pl.strefakursow.springadvanced.service.impl.JpaUserDetailsService;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity(debug=false)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private JpaUserDetailsService userDetailsService;
+    JpaUserDetailsService userDetailsService;
+
     @Autowired
-    private CustomDaoAuthenticationProvider authenticationProvider;
+    CustomDaoAuthenticationProvider authenticationProvider;
 
     @Autowired
     public SecurityConfig(JpaUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
+
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -32,37 +36,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider);
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-            .antMatchers("/login").permitAll()
-            .antMatchers("/css/**").permitAll()
-            .antMatchers("/sign_up").permitAll()
-            .antMatchers("/admin_panel").hasAuthority("ADMIN")
-            .anyRequest().authenticated()
-            .and()
-        .formLogin()
-            .loginPage("/login")
-            .usernameParameter("foo")
-            .passwordParameter("bar")
-            .defaultSuccessUrl("/user_panel", true)
-            .and()
-        .logout()
-            .logoutUrl("/user_logout")
-            .logoutSuccessUrl("/login?logout")
-            .deleteCookies("JSESSIONID");
-    }
+                .authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/sign_up").permitAll()
+                .antMatchers("/confirm_email").permitAll()
+                .antMatchers("/confirm_email").permitAll()
+                .antMatchers("/admin_panel").hasAuthority("ADMIN")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .usernameParameter("foo")
+                .passwordParameter("bar")
+                .defaultSuccessUrl("/user_panel", true)
+                .and()
+                .logout()
+                .logoutUrl("/user_logout")
+                .logoutSuccessUrl("/login?logout")
+                .deleteCookies("cookies");
 
-//    @SuppressWarnings("deprecation")
-//    @Bean
-//    public static NoOpPasswordEncoder passwordEncoder() {
-//        return (NoOpPasswordEncoder)NoOpPasswordEncoder.getInstance();
-//    }
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

@@ -17,7 +17,7 @@ public class ItemServiceImpl implements ItemService {
 
     ItemRepository itemRepository;
     ItemPagingAndSortingRepository itemPagingAndSortingRepository;
-
+    
     @Autowired
     public ItemServiceImpl(ItemRepository itemRepository, ItemPagingAndSortingRepository itemPagingAndSortingRepository) {
         this.itemRepository = itemRepository;
@@ -29,38 +29,46 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.save(item);
     }
 
+
     @Override
     public List<Item> getItemsWithQuantityOverTwenty() {
         return itemRepository.getItemsWithQuantityOverTwenty();
     }
 
-    @Override
-    public List<Item> getItemWithQuantityOver(int minQuantityThreshold) {
-        return itemRepository.getItemWithQuantityOver(minQuantityThreshold);
-    }
 
     @Override
-    public List<Item> getItemWithNameLike(String regex) {
-        return itemRepository.getItemWithNameLike(regex);
+    public List<Item> getItemsWithQuantityOver(int minQuantityThreshold ) {
+        return itemRepository.getItemsWithQuantityOver(minQuantityThreshold);
     }
+
+
+    @Override
+    public List<Item> getItemsWithNameLike(String regex) {
+        return itemRepository.getItemsWithNameLike(regex);
+    }
+
 
     @Override
     public List<Item> findByQuantity(Integer quantity) {
         return itemRepository.findByQuantity(quantity);
     }
 
-    @Override
-    public List<Item> findAllByQuantityBetween(Integer minQ, Integer maxQ) {
-        return itemRepository.findAllByQuantityBetween(minQ, maxQ);
-    }
 
     @Override
-    public List<Item> findAllByQuantityGreaterThanEqualOrderByQuantityDesc(Integer minQ) {
-        return itemRepository.findAllByQuantityGreaterThanEqualOrderByQuantityDesc(minQ);
+    public List<Item> findByQuantityBetween(Integer minQuantity, Integer maxQuantity) {
+        return itemRepository.findByQuantityBetween(minQuantity, maxQuantity);
     }
+
+
+    @Override
+    public List<Item> findByQuantityGreaterThanEqualOrderByQuantityDesc(Integer minQuantity) {
+        return itemRepository.findByQuantityGreaterThanEqualOrderByQuantityDesc(minQuantity);
+    }
+
 
     @Override
     public Page<Item> findAll(Pageable pageable) {
         return itemPagingAndSortingRepository.findAll(pageable);
     }
+
 }
