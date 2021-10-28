@@ -31,6 +31,7 @@ public class SignUpController {
                                    @RequestParam("password") String password, @RequestParam("email") String email) {
         mav.setViewName("redirect:/login");
         User user = User.of(username, password, email);
+        user.setEnabled(false);
         signUpService.signUpUser(user);
         return mav;
     }

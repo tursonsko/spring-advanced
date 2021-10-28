@@ -1,10 +1,14 @@
 package pl.strefakursow.springadvanced.entity;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class User implements UserDetails {
@@ -23,15 +27,21 @@ public class User implements UserDetails {
     @Column(columnDefinition = "boolean default false")
     private boolean enabled;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="user_roles", joinColumns = @JoinColumn(name="id_user"), inverseJoinColumns = @JoinColumn(name= "id_role"))
+    Set<Role> roles;
+
     public User() {
 
     }
 
-    public User(String username, String password) {
-        super();
+    public User(Long idUser, String username, String password, String email, String confirmationToken, boolean enabled) {
+        this.idUser = idUser;
         this.username = username;
         this.password = password;
-        this.enabled = false;
+        this.email = email;
+        this.confirmationToken = confirmationToken;
+        this.enabled = enabled;
     }
 
     public static User of(String username, String password, String email) {
@@ -40,13 +50,13 @@ public class User implements UserDetails {
         user.setPassword(password);
         user.setEmail(email);
         user.setEnabled(false);
+        user.roles = new HashSet<Role>();
         return user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //todo implement
-        return null;
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toSet());
     }
 
     @Override
@@ -92,7 +102,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
     }
 
     public String getEmail() {
@@ -115,4 +125,11 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
