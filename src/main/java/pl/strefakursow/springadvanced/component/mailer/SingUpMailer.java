@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SingUpMailer {
-	
-	
+
 	private JavaMailSender emailSender;
 	
 	private SignUpMailTextFactory textFactory;
@@ -18,8 +17,7 @@ public class SingUpMailer {
 		 this.emailSender = emailSender;
 		 this.textFactory = textFactory;
 	}
-	
-	
+
 	public void sendMessage(String to, String subject, String text) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(to);
@@ -35,6 +33,5 @@ public class SingUpMailer {
 		message.setText(textFactory.getConfirmationMailText(token));
 		emailSender.send(message);
 	}
-	
 
 }

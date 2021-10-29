@@ -15,44 +15,49 @@ import org.springframework.util.Assert;
 @Component
 public class CustomDaoAuthenticationProvider implements AuthenticationProvider {
 
-    private static final String USERNAME_CANNOT_BEN_NULL = "Username cannot ben null";
-    private static final String CREDENTIALS_CANNOT_BEN_NULL = "Credentials cannot ben null";
-    private static final String INCORRECT_PASSWORD = "Incorrect password";
+	private UserDetailsService userDetailsService;
+	
+	private PasswordEncoder passwordEncoder;
 
-    private UserDetailsService userDetailsService;
-    private PasswordEncoder passwordEncoder;
+	private static final String USERNAME_CANNOT_BE_NULL = "Username cannot be null";
 
-    @Autowired
-    public CustomDaoAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }
+	private static final String CREDENTIALS_CANNOT_BE_NULL = "Credentials cannot be null";
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String name = authentication.getName();
-        Object credentials = authentication.getCredentials();
-        Assert.notNull(name, USERNAME_CANNOT_BEN_NULL);
-        Assert.notNull(credentials, CREDENTIALS_CANNOT_BEN_NULL);
+	private static final String INCORRECT_PASSWORD = "Incorrect password";
 
-        if (!(credentials instanceof String))
-            return null;
+	@Autowired
+	public CustomDaoAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+		this.userDetailsService = userDetailsService;
+		this.passwordEncoder = passwordEncoder;
+	}
 
-        String password = credentials.toString();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(name);
+	@Override
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		String name = authentication.getName();
+		Object credentials = authentication.getCredentials();
+		Assert.notNull(name, USERNAME_CANNOT_BE_NULL);
+		Assert.notNull(credentials, CREDENTIALS_CANNOT_BE_NULL);
 
-//        boolean passwordMatch = userDetails.getPassword().equals(password);
-        boolean passwordMatch = passwordEncoder.matches(password, userDetails.getPassword());
+		if (credentials instanceof String) {
+			return null;
+		}
+		String password = credentials.toString();
 
-        if(!passwordMatch)
-            throw new BadCredentialsException(INCORRECT_PASSWORD);
+		UserDetails userDetails = userDetailsService.loadUserByUsername(name);
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password, userDetails.getAuthorities());
-        return token;
-    }
+		boolean passwordMatch = passwordEncoder.matches(password, userDetails.getPassword());
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
-    }
+		if (!passwordMatch) {
+			throw new BadCredentialsException(INCORRECT_PASSWORD);
+		}
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(name, password,
+				userDetails.getAuthorities());
+		return token;
+	}
+
+	@Override
+	public boolean supports(Class<?> authentication) {
+		return authentication.equals(UsernamePasswordAuthenticationToken.class);
+	}
 }

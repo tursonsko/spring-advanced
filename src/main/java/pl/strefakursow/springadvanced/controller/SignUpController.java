@@ -13,27 +13,26 @@ import pl.strefakursow.springadvanced.service.SignUpService;
 @Controller
 public class SignUpController {
 
-    private SignUpService signUpService;
+	private SignUpService signUpService;
 
-    @Autowired
-    public SignUpController(SignUpService signUpService) {
-        this.signUpService = signUpService;
-    }
+	@Autowired
+	public SignUpController(SignUpService signUpService) {
+		this.signUpService = signUpService;
+	}
 
-    @GetMapping(value = "/sign_up")
-    public ModelAndView signUp(ModelAndView mav) {
-        mav.setViewName("sign_up");
-        return mav;
-    }
+	@GetMapping(value = "/sign_up")
+	public ModelAndView signUp(ModelAndView mav) {
+		mav.setViewName("sign_up");
+		return mav;
+	}
 
-    @PostMapping(value = "/sign_up")
-    public ModelAndView signUpPost(ModelAndView mav, @RequestParam("username") String username,
-                                   @RequestParam("password") String password, @RequestParam("email") String email) {
-        mav.setViewName("redirect:/login");
-        User user = User.of(username, password, email);
-        user.setEnabled(false);
-        signUpService.signUpUser(user);
-        return mav;
-    }
+	@PostMapping(value = "/sign_up")
+	public ModelAndView signUpPost(ModelAndView mav, @RequestParam("username") String username,
+			@RequestParam("password") String password, @RequestParam("email") String email) {
+		mav.setViewName("redirect:/login");
+		User user = User.of(username, password, email);
+		signUpService.signUpUser(user);
+		return mav;
+	}
 
 }

@@ -1,50 +1,59 @@
 package pl.strefakursow.springadvanced.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="item")
 public class Item {
+	
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long idItem;
+	
+	private String name;
+	
+	private String price;
+	
+	private Integer quantity;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idItem;
+	public Long getIdItem() {
+		return idItem;
+	}
 
-    private String name;
+	public void setIdItem(Long idItem) {
+		this.idItem = idItem;
+	}
 
-    private String price;
+	public String getName() {
+		return name;
+	}
 
-    private Integer quantity;
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Long getIdItem() {
-        return idItem;
-    }
+	public String getPrice() {
+		return price;
+	}
 
-    public void setIdItem(Long idItem) {
-        this.idItem = idItem;
-    }
+	public void setPrice(String price) {
+		this.price = price;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Integer getQuantity() {
+		return quantity;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+	
+	
+	
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
 }

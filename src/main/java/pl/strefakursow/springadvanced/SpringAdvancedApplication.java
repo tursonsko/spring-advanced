@@ -2,11 +2,14 @@ package pl.strefakursow.springadvanced;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class SpringAdvancedApplication {
+	
+	public static void main(String[] args) {
+		SpringApplication.run(SpringAdvancedApplication.class, args);
+	}
 
-    public static void main(String[] args) {
-        SpringApplication.run(SpringAdvancedApplication.class, args);
-    }
 }
