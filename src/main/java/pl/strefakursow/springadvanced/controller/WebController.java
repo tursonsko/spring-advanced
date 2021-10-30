@@ -10,17 +10,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pl.strefakursow.springadvanced.entity.User;
 import pl.strefakursow.springadvanced.event.UserPanelEnterPublisher;
+import pl.strefakursow.springadvanced.profile.ProfileBean;
 
 @Controller
 public class WebController {
 
 	private UserPanelEnterPublisher publisher;
 	private String greetings;
+	private ProfileBean profileBean;
 
 	@Autowired
-	public WebController(UserPanelEnterPublisher publisher, @Value("${user.panel.greetings}") String greetings) {
+	public WebController(UserPanelEnterPublisher publisher, @Value("${user.panel.greetings}") String greetings,
+						 ProfileBean profileBean) {
 		this.publisher = publisher;
 		this.greetings = greetings;
+		this.profileBean = profileBean;
 	}
 
 	@RequestMapping(value = "/user_panel", method = RequestMethod.GET)
@@ -29,6 +33,7 @@ public class WebController {
 		User principal =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		publisher.publish(principal.getUsername());
 		mav.addObject("greetings", greetings);
+		System.out.println(profileBean.showMessage());
 		return mav;
 	}
 
