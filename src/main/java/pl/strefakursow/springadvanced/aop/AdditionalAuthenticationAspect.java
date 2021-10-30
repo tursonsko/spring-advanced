@@ -20,14 +20,5 @@ public class AdditionalAuthenticationAspect {
             && credentials.getPassword().equals("test"))) {
             throw new RuntimeException("wrong login or password");
         }
-
-
-//        log.info("AdditionalAuthenticationAspect");
-////        log.info("username: " + credentials.getUserName());
-//        log.info("username: " + credentials.getPassword());
-//
-//        if (!credentials.getPassword().equals("test")) {
-//            throw new RuntimeException("wrong login or password");
-//        }
     }
 }
